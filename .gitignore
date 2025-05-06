@@ -1,0 +1,4 @@
+.machado
+__pycache__/utils.cpython-37.pyc
+embeddings/metadata.json
+index/faiss_index.bin

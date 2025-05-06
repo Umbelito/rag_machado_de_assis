@@ -72,4 +72,4 @@ if __name__ == "__main__":
 
         print("\n🧠 Resposta gerada:\n")
         print(resposta)
-        print("\n" + "-" * 50)
+        print("\n" + "-" * 100)
