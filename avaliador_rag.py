@@ -23,7 +23,7 @@ def calcular_recall_at_k(perguntas, referencias, index, model, contextos, k=5):
         query_embed = model.encode([referencia])
         D, I = index.search(query_embed, k)
         recuperados = [contextos[i] for i in I[0]]
-        found = any(ref in r for r in recuperados)
+        found = any(referencia in r for r in recuperados)
         recalls.append(1 if found else 0)
     return recalls
 
