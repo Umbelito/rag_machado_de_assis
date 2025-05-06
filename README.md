@@ -1,6 +1,4 @@
-# ReadMe
-
-## Descrição do Projeto
+# Descrição do Projeto
 
 Este projeto é uma implementação de um sistema de recuperação de respostas (RAG - Retrieval-Augmented Generation) que utiliza embeddings de texto para responder perguntas baseadas em documentos de texto. Ele combina a recuperação de informações com a geração de respostas utilizando modelos de linguagem. 
 
@@ -14,7 +12,7 @@ O projeto contém três scripts principais:
 
 3. **avaliador_rag.py**: Um script para avaliar o desempenho do sistema de RAG utilizando métricas como BERTScore e Recall@K. Ele lê um arquivo CSV com perguntas e respostas de referência, calcula os resultados e salva em um novo arquivo CSV.
 
-## Pré-requisitos
+<!-- ## Pré-requisitos -->
 
 <!-- Antes de executar os scripts, certifique-se de ter as seguintes bibliotecas instaladas:
 
