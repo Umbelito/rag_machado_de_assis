@@ -18,7 +18,7 @@ METADATA_PATH = "embeddings/metadata.json"
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 # MODELOS PARA COMPARAÇÃO
-LLM_3B_MODEL = "llama2:3b"  # LLM de 3B parâmetros (sem RAG)
+LLM_3B_MODEL = "llama2"  # LLM de 3B parâmetros (sem RAG)
 LLM_1B_MODEL = "tinyllama"  # LLM de 1B parâmetros (com RAG)
 TOP_K = 5
 
