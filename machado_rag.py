@@ -10,7 +10,7 @@ from utils import load_documents, create_embeddings, search_similar_chunks
 from sentence_transformers import SentenceTransformer
 
 # CONFIGURACOES
-DATA_DIR = "/home/umbelito/IPCC/obras/raw/txt"
+DATA_DIR = "/home/umbelito/rag_machado_de_assis/obras/raw/txt"
 CATEGORIAS = ["romance", "cronica"]
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 INDEX_PATH = "index/faiss_index.bin"
