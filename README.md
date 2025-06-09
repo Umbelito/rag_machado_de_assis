@@ -1,71 +1,212 @@
-# Descrição do Projeto
+# Teste Comparativo: LLM 3B vs LLM 1B + RAG
 
-Este projeto é uma implementação de um sistema de recuperação de respostas (RAG - Retrieval-Augmented Generation) que utiliza embeddings de texto para responder perguntas baseadas em documentos de texto. Ele combina a recuperação de informações com a geração de respostas utilizando modelos de linguagem. 
+Este projeto implementa um teste comparativo entre duas abordagens de LLMs para responder perguntas sobre obras de Machado de Assis:
 
-## Estrutura do Projeto
+## 🎯 Objetivo
 
-O projeto contém três scripts principais:
+Comparar o desempenho de:
+- **LLM de 3B parâmetros** (sem RAG) - geração pura baseada no conhecimento pré-treinado
+- **LLM de 1B parâmetros** (com RAG) - geração baseada em contexto recuperado de um banco vetorial
 
-1. **machado_rag.py**: O script principal que carrega ou cria um índice FAISS a partir dos documentos de texto e permite que o usuário faça perguntas, gerando respostas com base em trechos semelhantes encontrados nos documentos.
+## 🏗️ Arquitetura
 
-2. **utils.py**: Um módulo utilitário que contém funções para dividir textos, carregar documentos, criar embeddings e buscar trechos similares utilizando o modelo de embeddings.
+### LLM de 3B (sem RAG)
+- Modelo: `llama2:3b`
+- Abordagem: Geração pura sem contexto adicional
+- Prompt: Instrução simples para responder como especialista em literatura
 
-3. **avaliador_rag.py**: Um script para avaliar o desempenho do sistema de RAG utilizando métricas como BERTScore e Recall@K. Ele lê um arquivo CSV com perguntas e respostas de referência, calcula os resultados e salva em um novo arquivo CSV.
+### LLM de 1B (com RAG)
+- Modelo: `tinyllama`
+- Abordagem: Retrieval-Augmented Generation (RAG)
+- Banco vetorial: FAISS com embeddings de trechos das obras
+- Prompt: Contexto específico + pergunta
 
-<!-- ## Pré-requisitos -->
+## 📁 Estrutura do Projeto
 
-<!-- Antes de executar os scripts, certifique-se de ter as seguintes bibliotecas instaladas:
+```
+├── machado_rag.py          # Script principal do teste comparativo
+├── utils.py               # Funções auxiliares
+├── setup_models.py        # Script para configurar modelos
+├── analisar_resultados.py # Script para analisar resultados
+├── requirements.txt       # Dependências Python
+├── README.md             # Este arquivo
+├── index/                # Índice FAISS (gerado automaticamente)
+├── embeddings/           # Metadados dos embeddings
+├── resultados/           # Resultados das comparações (JSON)
+└── analises/             # Análises exportadas (CSV)
+```
 
-- `faiss`
-- `numpy`
-- `pandas`
-- `requests`
-- `sentence-transformers`
-- `bert-score`
-- `tqdm`
+## 🚀 Como Usar
 
-Você pode instalar as dependências necessárias com o seguinte comando:
+### 1. Instalação das Dependências
 
 ```bash
-pip install faiss-cpu numpy pandas requests sentence-transformers bert-score tqdm
-``` -->
+# Instalar dependências Python
+pip install -r requirements.txt
 
-## Configuração
+# Ou instalar manualmente
+pip install faiss-cpu sentence-transformers requests numpy pandas
+```
 
-Antes de executar o *machado_rag.py*, você deve configurar as seguintes variáveis no código:
+### 2. Configuração dos Modelos
 
-- `DATA_DIR`: O diretório onde os documentos de texto estão armazenados.
-- `CATEGORIAS`: As categorias de documentos que você deseja carregar.
-- `EMBEDDING_MODEL`: O modelo de embeddings que você deseja usar (ex: "all-MiniLM-L6-v2").
-- `INDEX_PATH`: O caminho onde o índice FAISS será salvo.
-- `METADATA_PATH`: O caminho onde os metadados dos documentos serão salvos.
-- `OLLAMA_URL`: A URL do serviço de geração de respostas.
-- `LLM_MODEL`: O modelo de linguagem que você deseja utilizar.
-- `TOP_K`: O número de trechos a serem recuperados para gerar a resposta.
+```bash
+# Executar script de configuração automática
+python setup_models.py
+```
 
-## Como Executar
+Este script irá:
+- Verificar se o Ollama está instalado
+- Verificar se o servidor Ollama está rodando
+- Baixar automaticamente os modelos necessários:
+  - `llama2:3b` (LLM de 3B parâmetros)
+  - `tinyllama` (LLM de 1B parâmetros)
 
-1. Para iniciar o sistema de RAG, execute o script *machado_rag.py*:
+### 3. Preparação dos Dados
+
+Certifique-se de que as obras estão organizadas:
+```
+/home/umbelito/IPCC/obras/raw/txt/
+├── romance/
+│   ├── dom_casmurro.txt
+│   ├── memorias_postumas.txt
+│   └── ...
+└── cronica/
+    ├── cronica1.txt
+    ├── cronica2.txt
+    └── ...
+```
+
+### 4. Execução do Teste Comparativo
 
 ```bash
 python machado_rag.py
 ```
 
-2. Você será solicitado a inserir uma pergunta. Digite sua pergunta e pressione Enter. Para sair, digite 'sair'.
-
-## Avaliação do Modelo
-
-Para avaliar o desempenho do modelo, use o script *avaliador_rag.py.* Certifique-se de que você tenha um arquivo CSV chamado avaliacao.csv com as colunas apropriadas:
-
-- `pergunta`: A pergunta feita.
-- `resposta_gerada`: A resposta gerada pelo modelo.
-- `resposta_referencia`: A resposta correta ou de referência.
-- `contexto_recuperado`: O contexto que foi recuperado para a resposta.
-
-Execute o script da seguinte forma:
+### 5. Análise dos Resultados
 
 ```bash
-python avaliador_rag.py
+python analisar_resultados.py
 ```
 
-Os resultados da avaliação serão salvos em um arquivo chamado *avaliacao_com_resultados.csv*.
+## 📊 Funcionalidades
+
+### Script Principal (`machado_rag.py`)
+- Comparação lado a lado das duas abordagens
+- Medição de tempo de resposta
+- Salvamento automático de resultados
+- Interface interativa para perguntas
+
+### Script de Setup (`setup_models.py`)
+- Verificação automática do ambiente
+- Download automático dos modelos
+- Validação da configuração
+
+### Script de Análise (`analisar_resultados.py`)
+- Análise estatística dos tempos
+- Categorização das perguntas
+- Exportação para CSV
+- Relatórios de performance
+
+## 🔧 Configurações
+
+No arquivo `machado_rag.py`, você pode ajustar:
+
+```python
+# Modelos
+LLM_3B_MODEL = "llama2:3b"    # Modelo de 3B parâmetros
+LLM_1B_MODEL = "tinyllama"    # Modelo de 1B parâmetros
+
+# Configurações RAG
+TOP_K = 5                     # Número de trechos relevantes
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"  # Modelo de embeddings
+```
+
+## 📈 Resultados
+
+### Formato de Saída
+Os resultados são salvos em JSON com:
+- Timestamp da comparação
+- Pergunta realizada
+- Respostas de ambas as abordagens
+- Tempos de resposta
+- Metadados dos modelos
+
+### Análises Disponíveis
+- **Tempo de resposta**: Média, mínimo, máximo
+- **Comparação de performance**: Qual abordagem é mais rápida
+- **Categorização de perguntas**: Por tipo de conteúdo
+- **Exportação para CSV**: Para análise detalhada
+
+## 🎯 Casos de Uso
+
+Este teste é útil para:
+- Avaliar trade-offs entre tamanho do modelo e qualidade
+- Comparar eficiência de RAG vs geração pura
+- Analisar impacto do contexto específico na qualidade das respostas
+- Benchmark de performance em tarefas específicas de literatura
+- Pesquisa em sistemas de recuperação de informação
+
+## 🔍 Exemplo de Saída
+
+```
+🔬 TESTE COMPARATIVO: LLM 3B vs LLM 1B + RAG
+============================================================
+📖 LLM de 3B parâmetros: llama2:3b (SEM RAG)
+🔍 LLM de 1B parâmetros: tinyllama (COM RAG)
+============================================================
+
+🤔 Pergunta: Quem é o protagonista de Dom Casmurro?
+================================================================================
+
+📚 LLM de 3B parâmetros (SEM RAG):
+--------------------------------------------------
+⏱️  Tempo de resposta: 2.34s
+💬 Resposta: [Resposta baseada no conhecimento pré-treinado]
+
+🔍 LLM de 1B parâmetros (COM RAG):
+--------------------------------------------------
+⏱️  Tempo de resposta: 1.87s
+📖 Trechos relevantes encontrados: 5
+💬 Resposta: [Resposta baseada nos trechos recuperados]
+
+📊 COMPARAÇÃO:
+--------------------------------------------------
+🕐 Tempo 3B (sem RAG): 2.34s
+🕐 Tempo 1B (com RAG): 1.87s
+⚡ Diferença: 0.47s
+🏆 LLM de 1B com RAG foi mais rápida!
+```
+
+## 🛠️ Solução de Problemas
+
+### Ollama não encontrado
+```bash
+# Instalar Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+```
+
+### Servidor Ollama não está rodando
+```bash
+# Iniciar servidor
+ollama serve
+```
+
+### Modelos não encontrados
+```bash
+# Executar setup automático
+python setup_models.py
+```
+
+### Erro de dependências
+```bash
+# Reinstalar dependências
+pip install -r requirements.txt --upgrade
+```
+
+## 📝 Notas Técnicas
+
+- O índice FAISS é criado automaticamente na primeira execução
+- Os embeddings são gerados usando o modelo `all-MiniLM-L6-v2`
+- Os resultados são salvos automaticamente na pasta `resultados/`
+- As análises são exportadas para CSV na pasta `analises/`

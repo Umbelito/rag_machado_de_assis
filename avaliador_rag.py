@@ -60,4 +60,4 @@ def avaliar_rag(path_csv):
     print("\n✅ Avaliação salva em: avaliacao_com_resultados.csv")
 
 if __name__ == "__main__":
-    avaliar_rag("avaliacao.csv")
+    avaliar_rag("avaliacao_contexto_vazio.csv")
